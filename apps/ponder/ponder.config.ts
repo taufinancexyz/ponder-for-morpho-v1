@@ -35,7 +35,7 @@ function configCreator({
   return createConfig({
     chains: {
       [chain.name]: {
-        chainId: chain.chainId,
+        id: chain.chainId,
         rpcUrl: chain.rpcUrl,
       },
     },
