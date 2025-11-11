@@ -92,6 +92,7 @@ export const ENV = (() => {
       name: selectedChainName,
       chainId: selectedChainIdNumber,
       rpcUrl: selectedChainRpcUrl,
+      pollingInterval: 10_000,
     },
     morpho: {
       address: morphoAddress as `0x${string}`,
