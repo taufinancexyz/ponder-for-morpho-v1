@@ -21,6 +21,7 @@ export const ENV = (() => {
   const metaMorphoFactoryStartBlock = process.env.META_MORPHO_FACTORY_START_BLOCK;
   const adaptiveCurveIrmAddress = process.env.ADAPTIVE_CURVE_IRM_ADDRESS;
   const adaptiveCurveIrmStartBlock = process.env.ADAPTIVE_CURVE_IRM_START_BLOCK;
+  const multicall3Address = process.env.MULTICALL3_ADDRESS;
 
   if (!isPonderChain(selectedChainName)) {
     throw new Error(
@@ -31,7 +32,12 @@ export const ENV = (() => {
     );
   }
 
-  const contractNames = ["MORPHO", "META_MORPHO_FACTORY", "ADAPTIVE_CURVE_IRM"] as const;
+  const contractNames = [
+    "MORPHO",
+    "META_MORPHO_FACTORY",
+    "ADAPTIVE_CURVE_IRM",
+    "MULTICALL3",
+  ] as const;
 
   [morphoAddress, metaMorphoFactoryAddress, adaptiveCurveIrmAddress].forEach((address, index) => {
     if (!address) {
@@ -98,6 +104,9 @@ export const ENV = (() => {
     adaptiveCurveIrm: {
       address: adaptiveCurveIrmAddress as `0x${string}`,
       startBlock: Number(adaptiveCurveIrmStartBlock),
+    },
+    multicall3: {
+      address: multicall3Address as `0x${string}`,
     },
   };
 })();
