@@ -29,13 +29,16 @@ function parseRpcString(str: string): Transport {
   return http(str);
 }
 
-function asPonderChain<chainId extends number>(
-  chainId: chainId,
-): { id: chainId; rpc: Transport | undefined } {
+function asPonderChain<chainId extends number>(chainId: chainId): { id: chainId; rpc: Transport } {
   const rpcString = process.env[`PONDER_RPC_URL_${chainId.toFixed(0)}`];
+
+  if (!rpcString) {
+    throw new Error(`Missing PONDER_RPC_URL_${chainId.toFixed(0)} env var`);
+  }
+
   return {
     id: chainId,
-    rpc: rpcString ? parseRpcString(rpcString) : undefined,
+    rpc: parseRpcString(rpcString),
   };
 }
 
