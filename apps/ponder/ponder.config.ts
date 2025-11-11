@@ -4,16 +4,19 @@ import { getAbiItem } from "viem/utils";
 import { adaptiveCurveIrmAbi } from "./abis/AdaptiveCurveIrm";
 import { metaMorphoAbi } from "./abis/MetaMorpho";
 import { metaMorphoFactoryAbi } from "./abis/MetaMorphoFactory";
-import { ENV } from "./src/env";
+import { Chains, ENV } from "./src/env";
 
-import { chains } from "@/constants";
 import { morphoBlueAbi } from "~/abis/MorphoBlue";
 
 function configCreator({
   chain,
   contracts,
 }: {
-  chain: keyof typeof chains;
+  chain: {
+    name: Chains;
+    chainId: number;
+    rpcUrl: string;
+  };
   contracts: {
     morpho: {
       address: `0x${string}`;
@@ -31,24 +34,27 @@ function configCreator({
 }) {
   return createConfig({
     chains: {
-      [chain]: chains[chain],
+      [chain.name]: {
+        chainId: chain.chainId,
+        rpcUrl: chain.rpcUrl,
+      },
     },
     contracts: {
       Morpho: {
         abi: morphoBlueAbi,
-        chain,
+        chain: chain.name,
         ...contracts.morpho,
       },
       MetaMorphoFactory: {
         abi: metaMorphoFactoryAbi,
-        chain,
+        chain: chain.name,
         ...contracts.metaMorphoFactory,
       },
       // https://ponder.sh/docs/config/contracts#factory-pattern
       // Get the MetaMorpho address from the MetaMorphoFactory CreateMetaMorpho event
       MetaMorpho: {
         abi: metaMorphoAbi,
-        chain,
+        chain: chain.name,
         address: factory({
           // MetaMorphoFactory address
           address: contracts.metaMorphoFactory.address,
@@ -61,7 +67,7 @@ function configCreator({
       },
       AdaptiveCurveIRM: {
         abi: adaptiveCurveIrmAbi,
-        chain,
+        chain: chain.name,
         ...contracts.adaptiveCurveIrm,
       },
     },

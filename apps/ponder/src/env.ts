@@ -1,7 +1,20 @@
-import { chains, isPonderChain } from "./constants";
+export const chains = ["RISE_TESTNET", "LOCAL_DOCKER"] as const;
+export type Chains = (typeof chains)[number];
+
+export function isPonderChain(chain: unknown): chain is (typeof chains)[number] {
+  return (
+    typeof chain === "string" &&
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    chains.includes(chain)
+  );
+}
 
 export const ENV = (() => {
-  const chain = process.env.SELECTED_CHAIN;
+  const selectedChainName = process.env.SELECTED_CHAIN_NAME;
+  const selectedChainId = process.env.SELECTED_CHAIN_ID;
+  const selectedChainRpcUrl = process.env.SELECTED_CHAIN_RPC_URL;
+
   const morphoAddress = process.env.MORPHO_ADDRESS;
   const morphoStartBlock = process.env.MORPHO_START_BLOCK;
   const metaMorphoFactoryAddress = process.env.META_MORPHO_FACTORY_ADDRESS;
@@ -9,12 +22,12 @@ export const ENV = (() => {
   const adaptiveCurveIrmAddress = process.env.ADAPTIVE_CURVE_IRM_ADDRESS;
   const adaptiveCurveIrmStartBlock = process.env.ADAPTIVE_CURVE_IRM_START_BLOCK;
 
-  if (!isPonderChain(chain)) {
+  if (!isPonderChain(selectedChainName)) {
     throw new Error(
       `Invalid or missing SELECTED_CHAIN env var. Must be one of: ${Object.keys(chains).join(
         ", ",
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      )}, but got: ${chain!}`,
+      )}, but got: ${selectedChainName!}`,
     );
   }
 
@@ -47,8 +60,33 @@ export const ENV = (() => {
     },
   );
 
+  // check chain id
+  if (!selectedChainId) {
+    throw new Error(`SELECTED_CHAIN_ID env var is not set`);
+  }
+
+  const selectedChainIdNumber = Number(selectedChainId);
+  if (!Number.isInteger(selectedChainIdNumber) || selectedChainIdNumber <= 0) {
+    throw new Error(`SELECTED_CHAIN_ID env var must be a positive integer`);
+  }
+
+  if (!selectedChainRpcUrl) {
+    throw new Error(`PONDER_RPC_URL env var is not set`);
+  }
+
+  // Check URL
+  try {
+    new URL(selectedChainRpcUrl);
+  } catch {
+    throw new Error(`PONDER_RPC_URL env var is not a valid URL`);
+  }
+
   return {
-    chain,
+    chain: {
+      name: selectedChainName,
+      chainId: selectedChainIdNumber,
+      rpcUrl: selectedChainRpcUrl,
+    },
     morpho: {
       address: morphoAddress as `0x${string}`,
       startBlock: Number(morphoStartBlock),
