@@ -71,14 +71,14 @@ export const ENV = (() => {
   }
 
   if (!selectedChainRpcUrl) {
-    throw new Error(`PONDER_RPC_URL env var is not set`);
+    throw new Error(`SELECTED_CHAIN_RPC_URL env var is not set`);
   }
 
   // Check URL
   try {
     new URL(selectedChainRpcUrl);
   } catch {
-    throw new Error(`PONDER_RPC_URL env var is not a valid URL`);
+    throw new Error(`SELECTED_CHAIN_RPC_URL env var is not a valid URL`);
   }
 
   return {
