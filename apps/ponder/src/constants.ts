@@ -47,6 +47,10 @@ export const chains = {
   localDocker: asPonderChain(1337),
 } as const;
 
+export function isPonderChain(chain: unknown): chain is keyof typeof chains {
+  return typeof chain === "string" && chain in chains;
+}
+
 export const Morpho = {
   abi: morphoBlueAbi,
   chain: {

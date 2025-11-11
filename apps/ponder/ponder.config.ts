@@ -4,14 +4,9 @@ import { getAbiItem } from "viem/utils";
 import { adaptiveCurveIrmAbi } from "./abis/AdaptiveCurveIrm";
 import { metaMorphoAbi } from "./abis/MetaMorpho";
 import { metaMorphoFactoryAbi } from "./abis/MetaMorphoFactory";
+import { ENV } from "./src/env";
 
-import {
-  AdaptiveCurveIRM,
-  chains,
-  MetaMorpho,
-  MetaMorphoFactory,
-  PreLiquidationFactory,
-} from "@/constants";
+import { chains } from "@/constants";
 import { morphoBlueAbi } from "~/abis/MorphoBlue";
 
 function configCreator({
@@ -73,18 +68,11 @@ function configCreator({
   });
 }
 
-export default createConfig({
-  chains,
+export default configCreator({
+  chain: ENV.chain,
   contracts: {
-    Morpho: {
-      abi: morphoBlueAbi,
-      chain: "riseTestnet",
-      address: "0x8d04a8c79cEB0889Bdd12acdF3Fa9D207eD3Ff63",
-      startBlock: 12439123,
-    },
-    MetaMorphoFactory,
-    MetaMorpho,
-    AdaptiveCurveIRM,
-    PreLiquidationFactory,
+    morpho: ENV.morpho,
+    metaMorphoFactory: ENV.metaMorphoFactory,
+    adaptiveCurveIrm: ENV.adaptiveCurveIrm,
   },
 });
