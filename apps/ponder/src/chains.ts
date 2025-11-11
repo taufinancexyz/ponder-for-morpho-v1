@@ -1,55 +1,7 @@
 import { chains } from "@/constants";
 import { type PickFrom, type PonderContract, pick } from "@/types";
 
-type ChainName = keyof typeof chains;
-
-function setDifference<T>(a: T[], ...bs: T[][]): T[] {
-  const set = new Set(a);
-  for (const b of bs) {
-    for (const item of b) {
-      set.delete(item);
-    }
-  }
-
-  return [...set];
-}
-
-const TIER_1 = [
-  "mainnet",
-  "base",
-  "polygon",
-  "unichain",
-  "katana",
-  "arbitrum",
-  "hyperevm",
-] satisfies ChainName[];
-
-const TIER_2 = [
-  "celo",
-  "hemi",
-  "lisk",
-  "optimism",
-  "plume",
-  "soneium",
-  "tac",
-  "worldchain",
-] satisfies Exclude<ChainName, (typeof TIER_1)[number]>[];
-
-const TIER_3 = ["sei"] satisfies Exclude<
-  ChainName,
-  (typeof TIER_1)[number] | (typeof TIER_2)[number]
->[];
-
-const TIER_4 = setDifference(Object.keys(chains), TIER_1, TIER_2, TIER_3) as Exclude<
-  ChainName,
-  (typeof TIER_1)[number] | (typeof TIER_2)[number] | (typeof TIER_3)[number]
->[];
-
 const tiers = {
-  "1": TIER_1,
-  "2": TIER_2,
-  "3": TIER_3,
-  "4": TIER_4,
   all: Object.keys(chains) as (keyof typeof chains)[],
 };
 
