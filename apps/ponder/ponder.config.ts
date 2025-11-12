@@ -37,6 +37,9 @@ function configCreator({
       [chain.name]: {
         id: chain.chainId,
         rpc: chain.rpcUrl,
+        // Local docker config
+        pollingInterval: chain.chainId === 1337 ? 10_000 : undefined,
+        disableCache: chain.chainId === 1337,
       },
     },
     contracts: {
