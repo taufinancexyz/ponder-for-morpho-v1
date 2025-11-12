@@ -16,11 +16,14 @@ import { type Address, type Hex } from "viem";
 
 import ponderConfig from "../../ponder.config";
 
+import { modifyLocalhostContracts } from "./chainShim";
 import { getLiquidatablePositions } from "./liquidatable-positions";
 import { getPreliquidations } from "./preliquidations";
 import { requestFn } from "./rpc";
 import { keyGenerator } from "./utils/rate-limiting";
 import type { JsonRpcMetadata, RpcParameters } from "./utils/types";
+
+modifyLocalhostContracts();
 
 function replaceBigInts<T>(value: T) {
   return replaceBigIntsBase(value, (x) => `${String(x)}n`);
