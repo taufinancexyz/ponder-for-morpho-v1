@@ -9,7 +9,8 @@ RUN corepack enable
 WORKDIR /workspace
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm install --frozen-lockfile --prod --ignore-scripts
+COPY apps/ponder/package.json apps/ponder/package.json
+RUN pnpm install --frozen-lockfile
 COPY . .
 
 CMD ["bash"]
