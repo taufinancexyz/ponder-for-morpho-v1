@@ -1,5 +1,9 @@
 FROM node:22-slim
 
+RUN apt-get update \
+    && apt-get install --yes jq \
+    && rm -rf /var/lib/apt/lists/*
+
 ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 
 ENV PNPM_HOME="/pnpm"
